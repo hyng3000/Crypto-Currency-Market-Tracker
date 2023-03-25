@@ -7,46 +7,6 @@
 
 import Foundation
 
-/*
-https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=250&page=1&sparkline=true&price_change_percentage=24h
-
-
- {
-    "id": "bitcoin",
-    "symbol": "btc",
-    "name": "Bitcoin",
-    "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
-    "current_price": 42373,
-    "market_cap": 817776889116,
-    "market_cap_rank": 1,
-    "fully_diluted_valuation": 888712296475,
-    "total_volume": 78877878800,
-    "high_24h": 42538,
-    "low_24h": 41183,
-    "price_change_24h": 273.3,
-    "price_change_percentage_24h": 0.64917,
-    "market_cap_change_24h": 2934887741,
-    "market_cap_change_percentage_24h": 0.36018,
-    "circulating_supply": 19323818,
-    "total_supply": 21000000,
-    "max_supply": 21000000,
-    "ath": 93482,
-    "ath_change_percentage": -54.63492,
-    "ath_date": "2021-11-10T14:24:11.849Z",
-    "atl": 72.61,
-    "atl_change_percentage": 58306.1198,
-    "atl_date": "2013-07-05T00:00:00.000Z",
-    "roi": null,
-    "last_updated": "2023-03-21T13:35:08.267Z",
-    "sparkline_in_7d": {
-      "price": [
-      ]
-    },
-    "price_change_percentage_24h_in_currency": 0.6491699904507616
-  }
-
-*/
-
 
 struct CoinData: Identifiable, Codable {
     let id, symbol, name: String
