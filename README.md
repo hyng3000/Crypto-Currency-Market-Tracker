@@ -8,9 +8,6 @@ Some Samples of work so far:
 
 
 
-
-https://user-images.githubusercontent.com/53566395/226784146-28e55fdf-6512-4789-b8ee-0460109dace8.mp4
-
-![Screenshot 2023-03-22 at 12 58 06 pm](https://user-images.githubusercontent.com/53566395/226784163-a5b5845e-4e92-4a50-9b61-526526788720.png)
-
-![Screenshot 2023-03-22 at 12 58 20 pm](https://user-images.githubusercontent.com/53566395/226784179-842b693f-3404-4dfb-ae6e-4066621ad6b6.png)
+https://user-images.githubusercontent.com/53566395/227719178-4c765e4a-826b-4059-ac0f-55332505e5e5.mp4
+![Simulator Screen Shot - iPhone 14 Pro - 2023-03-26 at 00 00 51](https://user-images.githubusercontent.com/53566395/227719207-8ca472a0-4c80-443c-aedb-f2c2cf74b803.png)
+![Simulator Screen Shot - iPhone 14 Pro - 2023-03-26 at 00 02 05](https://user-images.githubusercontent.com/53566395/227719209-46ea0718-36bb-4293-a932-fc4c91031bb3.png)
