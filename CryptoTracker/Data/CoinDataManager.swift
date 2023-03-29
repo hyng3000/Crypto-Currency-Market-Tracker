@@ -19,7 +19,7 @@ class CoinDataManager {
     var coinsSubscription: AnyCancellable?
     
     init() {
-      getCoins()
+        getCoins()
     }
     
     private func getCoins() {
@@ -28,8 +28,8 @@ class CoinDataManager {
         coinsSubscription = NetworkingManager.download(from: url)
             .receive(on: DispatchQueue.main)
             .decode(type: [CoinData].self, decoder: JSONDecoder())
-            .sink(receiveCompletion: NetworkingManager.completionHandler) { [weak self] (returnedCoins) in
-                self?.allCoins = returnedCoins
+            .sink(receiveCompletion: NetworkingManager.completionHandler) { [weak self] (coins) in
+                self?.allCoins = coins
                 self?.coinsSubscription?.cancel()
             }
     }

@@ -12,14 +12,25 @@ import Combine
 class CoinImageManager {
 
     @Published var image: UIImage? = nil
-
+    private let coin: CoinData
     var imageSubscription: AnyCancellable?
+    
+    let directoryName = "coin_images"
 
-    init(url: String) {
-        getCoinImage(from: url)
+    init(coin: CoinData) {
+        self.coin = coin
+        getCoinImage(name: coin.name)
     }
     
-    private func getCoinImage(from url: String) {
+    private func getCoinImage(name: String) {
+        if let savedImage = AppFileManager.instance.getImage(imageName: name, directoryName: directoryName) {
+            image = savedImage
+        } else {
+            downloadcoinImage(from: coin.image)
+        }
+    }
+    
+    private func downloadcoinImage(from url: String) {
         guard let url = URL(string: url) else { return }
         
         imageSubscription = NetworkingManager.download(from: url)
@@ -29,10 +40,12 @@ class CoinImageManager {
             .sink(
             receiveCompletion: NetworkingManager.completionHandler,
             receiveValue: { [weak self] (image) in
-                self?.image = image
-                self?.imageSubscription?.cancel()
-            })
             
+                guard let self = self, let image else { return }
+                self.image = image
+                self.imageSubscription?.cancel()
+                AppFileManager.instance.saveUIImage(image, as: self.coin.name, in: self.directoryName)
+            })
     }
     
 }

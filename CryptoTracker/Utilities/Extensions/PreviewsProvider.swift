@@ -22,6 +22,9 @@ class DeveloperPreview {
     private init() {}
     
     let devViewModel = HomeViewModel()
+    
+    let analtics1 = AnalyticsModel(title: "Market Cap", value: "$12.58Bn", percentagechange: 25.34)
+    let analtics2 = AnalyticsModel(title: "Volume", value: "$1.25TRn", percentagechange: -15.0)
      
     let coin = CoinData(
        id: "bitcoin",

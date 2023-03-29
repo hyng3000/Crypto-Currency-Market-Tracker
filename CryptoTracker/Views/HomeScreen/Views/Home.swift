@@ -11,29 +11,32 @@ struct HomeView: View {
 
     @EnvironmentObject private var vm: HomeViewModel
     
-    @State private var showPortoflio: Bool = false
+    @State private var showPortfolioList: Bool = false
+    
+    @State private var showPortfolioSheet = false
 
     var body: some View {
         ZStack {
             Color.theme.background
             .ignoresSafeArea()
+            .sheet(isPresented: $showPortfolioSheet, content: {UserPortfolioView().environmentObject(vm)})
             
             VStack {
+                MarketInfoBar(showPortfolio: $showPortfolioList)
+                SearchBar(searchtext: $vm.searchtext)
                 
-                Spacer(minLength: 0)
-                
-                if !showPortoflio {
+                if !showPortfolioList {
                     allMarketCoins
                     Spacer(minLength: 0)
                 }
-                if showPortoflio {
+                if showPortfolioList {
                     portfolioCoins
                 }
                 Spacer()
                 HStack {
                     Text("Coin")
                     Spacer()
-                    if showPortoflio {
+                    if showPortfolioList {
                         Text("Holdings")
                     }
                     Text("Market Price").frame(width: UIScreen.main.bounds.width / 3.5, alignment: .trailing)
@@ -42,24 +45,28 @@ struct HomeView: View {
                 .foregroundColor(Color.theme.secondaryTextColor)
                 .padding(.horizontal)
                 
-                navHeader
+                navBar
             }
-            
         }
     }
 }
 
 extension HomeView {
-    private var navHeader: some View {
+    private var navBar: some View {
         HStack {
-            CircleButtonView(icon: showPortoflio ? "plus" : "info")
-                .animation(.none, value: showPortoflio)
-                .background(CircleButtonAnimationView(animate: $showPortoflio))
+            CircleButtonView(icon: showPortfolioList ? "plus" : "info")
+                .animation(.none, value: showPortfolioList)
+                .background(CircleButtonAnimationView(animate: $showPortfolioList))
+                .onTapGesture {
+                    if showPortfolioList {
+                       showPortfolioSheet.toggle()
+                    }
+                }
                         
             Spacer()
                     
-            Text(showPortoflio ? "Your Portfolio" : "Live Market Data")
-                .animation(.easeInOut, value: showPortoflio)
+            Text(showPortfolioList ? "Your Portfolio" : "Live Market Data")
+                .animation(.easeInOut, value: showPortfolioList)
                 .font(.headline)
                 .fontWeight(.heavy)
                 .foregroundColor(Color.theme.accent)
@@ -68,11 +75,11 @@ extension HomeView {
                     
             CircleButtonView(icon: "arrow.left.arrow.right")
                 .rotationEffect(
-                Angle(degrees: showPortoflio ? -180 : -0)
+                Angle(degrees: showPortfolioList ? -180 : -0)
                 )
                 .onTapGesture {
                     withAnimation(.spring()) {
-                        showPortoflio.toggle()
+                        showPortfolioList.toggle()
                     }
                 }
         }.padding()

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct CoinRowView: View {
 
-//    let image: UIImage
     let coin: CoinData
     let showHoldingsColumn: Bool
 
