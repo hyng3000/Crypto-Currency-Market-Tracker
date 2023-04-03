@@ -1,8 +1,20 @@
 # Crypto-Currency-Market-Tracker
 
-Work In Progress -> This project is incomplete
-
 An App to track the Crypto Market and your own Portfolio
+
+## Features (from a programming perspective):
+   - Strong MVVM Architecture
+   - Save Data with Core Data
+   - Download JSON Data from Coin Gecko API with URLSession
+   - Asynchronous programming
+   - Observer Pattern with Publishers, Observable Objects and Combine.
+
+## Features (from a product persepective):
+   - View Crypto Market Data with a pleasant and easy to use User Interface
+   - Save, Edit and Manage your portfolio and track its progress from a unified location
+
+## -> A work in progress <-
+- The core features are implemented, however this app is still under construction :)
 
 ##
 
