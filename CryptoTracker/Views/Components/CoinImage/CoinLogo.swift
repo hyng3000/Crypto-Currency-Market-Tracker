@@ -15,10 +15,19 @@ struct CoinLogo: View {
     
         VStack {
             CoinImage(coin: coin)
+                .frame(width: 50, height: 50)
             Text(coin.name)
+                .font(.headline)
+                .foregroundColor(Color.theme.accent)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text(coin.symbol.uppercased()).font(.title)
-                
-        }
+                .font(.caption)
+                .foregroundColor(Color.theme.accent)
+                .lineLimit(2)
+                .minimumScaleFactor(0.5)
+                .multilineTextAlignment(.center)
+        }.padding()
         
     }
 }

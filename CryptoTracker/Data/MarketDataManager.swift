@@ -28,7 +28,6 @@ class MarketDataManager {
             .receive(on: DispatchQueue.main)
             .decode(type: GlobalData.self, decoder: JSONDecoder())
             .sink(receiveCompletion: NetworkingManager.completionHandler) { [weak self] globalData in
-                print(globalData.data?.totalVolume)
                 self?.marketData = globalData.data
                 self?.marketDataSubscription?.cancel()
             }

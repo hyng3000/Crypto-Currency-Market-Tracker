@@ -10,12 +10,29 @@ import SwiftUI
 
 struct ExitButton: View {
 
-    @Environment(\.dismiss) var dismiss
+    let action: (() -> Void)?
+    let dismiss: DismissAction?
+    
+    init(action: @escaping () -> Void) {
+        self.action = action
+        self.dismiss = nil
+    }
+    
+    init(dismiss: DismissAction) {
+        self.dismiss = dismiss
+        self.action = nil
+    }
     
     var body: some View {
         Button(
             action: {
-                dismiss()
+                if let dismiss {
+                    dismiss()
+                } else {
+                    if let action{
+                        action()
+                    }
+                }
                 },
             label: {
                 Image(systemName: "xmark")
@@ -26,6 +43,6 @@ struct ExitButton: View {
 
 struct Exit_Previews: PreviewProvider {
     static var previews: some View {
-        ExitButton()
+        ExitButton(action: {})
     }
 }

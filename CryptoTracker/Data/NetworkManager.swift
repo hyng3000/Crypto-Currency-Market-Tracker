@@ -22,6 +22,9 @@ class NetworkingManager {
         }
     }
     
+    
+    
+    
     static func download(from url: URL) -> AnyPublisher<Data, Error> {
         return URLSession.shared.dataTaskPublisher(for: url)
             .subscribe(on: DispatchQueue.global(qos: .default))
@@ -33,6 +36,7 @@ class NetworkingManager {
     static func handleURLResponse(output: URLSession.DataTaskPublisher.Output, url: URL) throws -> Data {
             guard let response = output.response as? HTTPURLResponse,
                 response.statusCode >= 200 && response.statusCode <= 300 else {
+                    print("handleURLResponse - NetworkManager - .badURL")
                     throw NetworkingErrors.badURLResponse(url: url)
                 }
             return output.data
@@ -43,8 +47,7 @@ class NetworkingManager {
             case .finished:
                 break
             case .failure(let error):
-                print(completion)
-                print("Sink: " + error.localizedDescription)
+                print("CompletionHandler - NetworkManager: " + error.localizedDescription)
             }
         }
     
