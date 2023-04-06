@@ -19,7 +19,7 @@ struct HomeView: View {
         ZStack {
             Color.theme.background
             .ignoresSafeArea()
-            .sheet(isPresented: $showPortfolioSheet, content: {UserPortfolioView().environmentObject(vm)})
+            .sheet(isPresented: $showPortfolioSheet, content: {UserWalletView().environmentObject(vm)})
             
             VStack {
                 MarketInfoBar(showPortfolio: $showPortfolioList)
@@ -87,24 +87,29 @@ extension HomeView {
     
     private var allMarketCoins: some View {
         List {
+
                 ForEach(vm.allCoins) { coin in
                     CoinRowView(coin: coin, showHoldingsColumn: false)
                         .listRowInsets(.init(top: 10, leading: 5, bottom: 10, trailing: 5))
                     }
             }
+                .coordinateSpace(name: "refreshCoinsList")
                 .listStyle(.plain)
                 .transition(.move(edge: .leading))
     }
     
     private var portfolioCoins: some View {
          List {
-            ForEach(vm.portfolioCoins) { coin in
+            ForEach(vm.walletCoins) { coin in
             CoinRowView(coin: coin, showHoldingsColumn: true)
                 .listRowInsets(.init(top: 10, leading: 5, bottom: 10, trailing: 5))
+                
             }
+            
         }
         .listStyle(.plain)
         .transition(.move(edge: .trailing))
+        .background(Color.theme.background)
     }
 }
 
@@ -115,3 +120,4 @@ struct ContentView_Previews: PreviewProvider {
             }.environmentObject(dev.devViewModel)
         }
     }
+

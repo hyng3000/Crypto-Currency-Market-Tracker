@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct UserPortfolioView: View {
+struct UserWalletView: View {
 
     @EnvironmentObject private var vm: HomeViewModel
     @State var selectedCoin: CoinData? = nil
@@ -16,7 +16,7 @@ struct UserPortfolioView: View {
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
                 ScrollView {
                     VStack {
                 
@@ -25,39 +25,43 @@ struct UserPortfolioView: View {
                         if selectedCoin != nil {
                             walletEditingStack
                         }
-                        
-                        }
                     }
+                }
             .navigationTitle("Edit")
             .toolbar(content: {
                 ToolbarItem(placement: .navigationBarLeading, content: {ExitButton(action: dismiss.callAsFunction)})
-                ToolbarItem(placement: .bottomBar, content: {saveButton})}
-            
+                ToolbarItem(placement: .navigationBarTrailing, content: {saveButton})}
             )
+            .onChange(of: vm.searchtext, perform: { value in
+                if value == "" {
+                    removeSelectedCoin()
+                }
+            
+            })
             
         }
     }
 }
 
-extension UserPortfolioView {
+extension UserWalletView {
          
     var searchList: some View { ScrollView(.horizontal, showsIndicators: true) {
     
         LazyHStack {
-            ForEach(vm.allCoins) { coin in
+            ForEach(
+            vm.searchtext.isEmpty ?
+                vm.walletCoins.isEmpty ? vm.allCoins : vm.walletCoins
+            : vm.allCoins) { coin in
                 CoinLogo(coin: coin)
                     .frame(width: 70, height: 100)
                     .padding(4)
                     .onTapGesture {
                             withAnimation(.easeIn) {
-                                selectedCoin = coin
+                                getSelectedCoinAmount(coin: coin)
                                     }
                                 }
                                 .background{
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .strokeBorder(
-                                        (coin.id == selectedCoin?.id) ? Color.theme.green : Color.theme.accent,
-                                        lineWidth: 1)
+                                    selectCoinBorder(coin: coin)
                                     }
                                 }.padding(5)
                             }
@@ -98,6 +102,7 @@ extension UserPortfolioView {
     
     var saveButton: some View {
         Button(action: {
+                    
                     saveButtonPressed()
                 
                 }){
@@ -106,13 +111,21 @@ extension UserPortfolioView {
                             .opacity(isSaved ? 1.0 : 0.0)
                         Text("Save")
                         }
-                        .offset(x: -15)
                         .opacity((selectedCoin != nil && selectedCoin?.currentHoldings != Double(quantityText)) ? 1.0 : 0.0)
                     }
                     .font(.headline)
                     .foregroundColor(Color(UIColor.systemBlue))
     
     }
+    
+    @ViewBuilder
+    func selectCoinBorder(coin: CoinData) -> some View {
+        RoundedRectangle(cornerRadius: 20)
+            .strokeBorder(
+                (coin.id == selectedCoin?.id) ?
+                Color.theme.green : Color.theme.accent,
+                lineWidth: 1)
+    } 
     
     func getValueInAUD(amount: String, coin: CoinData?) -> Double {
     if let amount = Double(amount),
@@ -122,37 +135,59 @@ extension UserPortfolioView {
         else {
             return 0.0
         }
-}
+    }
+
+    
 
     func saveButtonPressed() {
     
-        guard selectedCoin != nil else { return }
+        guard
+            let coin = selectedCoin,
+            let amount = Double(quantityText)
+            else { return }
+    
+        vm.updateWallet(coin: coin, amount: amount)
     
         withAnimation(.easeIn) {
             isSaved = true
         }
     
         UIApplication.shared.appDismissKeyboard()
+        vm.searchtext = ""
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             withAnimation(.easeInOut) {
                 isSaved = false
             }
+        
         }
         
     
+    }
+    
+    private func getSelectedCoinAmount(coin: CoinData) {
+        selectedCoin = coin
+        
+        if let coinInWallet = vm.walletCoins.first(where: {$0.id == coin.id}) {
+            let amount = coinInWallet.currentHoldings
+            quantityText = amount?.asNumberString() ?? ""
+            
+        }
+            
+        
     }
     
     func removeSelectedCoin() {
         selectedCoin = nil
         vm.searchtext = ""
     }
+    
 }
 
 
 
 struct UserPortfolioView_Previews: PreviewProvider {
     static var previews: some View {
-        UserPortfolioView()
+        UserWalletView()
     }
 }

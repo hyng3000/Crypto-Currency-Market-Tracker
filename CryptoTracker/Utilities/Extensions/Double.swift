@@ -26,7 +26,7 @@ extension Double {
      */
     func asCurrencyWithTwoDecimals() -> String {
         let number = NSNumber(value: self)
-        return currencyFormatterForSixDecmials.string(from: number) ?? "$0.00"
+        return currencyFormatterForTwoDecmials.string(from: number) ?? "$0.00"
     }
 
 

@@ -13,16 +13,18 @@ class HomeViewModel: ObservableObject {
 
     private let coinDataService = CoinDataManager()
     private let marketDataSerive = MarketDataManager()
+    private let walletDataService = WalletDataManager()
     
     private var cancellables =  Set<AnyCancellable>()
     
     @Published var allCoins: [CoinData] = []
     
-    @Published var portfolioCoins: [CoinData] = []
+    @Published var walletCoins: [CoinData] = []
     
     @Published var searchtext: String = ""
     
     @Published var analytics: [AnalyticsModel] = []
+    
 
     
     
@@ -30,6 +32,7 @@ class HomeViewModel: ObservableObject {
     
         addCoinsSubscriberWithFilter()
         addMarketDataSubscription()
+        addWalletSubscriber()
         
     }
     
@@ -53,12 +56,35 @@ class HomeViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    func addWalletSubscriber() {
+        $allCoins
+            .combineLatest(walletDataService.$savedEntities)
+            .map { (coins, entities) -> [CoinData] in
+                
+                coins.compactMap{ (coin) -> CoinData? in
+                    guard let entity = entities.first(where: { $0.id == coin.id }) else { return nil }
+                    return coin.updateHoldings(amount: entity.amount)
+                }
+            }
+            .sink { [weak self] (coins) in
+                self?.walletCoins = coins
+            }
+            .store(in: &cancellables)
+    }
+    
+//    func refresh() {
+//        
+//    }
 }
 
 
 // Helper Methods
 
 extension HomeViewModel {
+
+    func updateWallet(coin: CoinData, amount: Double) {
+        walletDataService.updateWallet(coin: coin, amount: amount)
+    }
     
     func filterCoinsByName(search: any StringProtocol, coins: [CoinData]) -> [CoinData] {
     

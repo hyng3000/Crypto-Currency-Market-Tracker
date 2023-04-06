@@ -62,7 +62,7 @@ extension CoinRowView {
     }
     
     var marketInfo: some View {
-        VStack(alignment: .center) {
+        VStack(alignment: .trailing) {
                 Text(
                 coin.currentPrice.asCurrencyWithSixDecimals()
                 ).bold()
